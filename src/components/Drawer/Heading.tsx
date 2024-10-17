@@ -1,8 +1,13 @@
+"use client";
+
 import { FC } from "react";
 import Logo from "@/vectors/logo.svg";
 import Image from "next/image";
+import { useClusterState } from "@/redux/cluster/slice";
 
 export const Heading: FC = () => {
+  const { name } = useClusterState();
+
   return (
     <div className="px-3 mb-4">
       <div className="flex items-center gap-2 mb-2">
@@ -10,7 +15,7 @@ export const Heading: FC = () => {
           <Image src={Logo} alt="logo" width={28} height={28} />
         </div>
 
-        <div className="font-light text-xl leading-8">[Cluster Name]</div>
+        <div className="font-light text-xl leading-8">{name}</div>
       </div>
 
       <hr className="border-lightGrey" />
