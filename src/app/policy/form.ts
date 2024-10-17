@@ -92,6 +92,7 @@ export const formValidation = object().shape({
   takeSnapshotAt: string().trim().required(ErrorMessages.required("Time")),
   runningDays: object().test(
     "at-least-one-checked",
+    "This field is required",
     (obj) => obj && Object.values(obj).some((value) => value === true)
   ),
   deleteSnapshot: object().required(

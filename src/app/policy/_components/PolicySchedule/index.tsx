@@ -116,7 +116,7 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
                 On the Following Day(s)
               </div>
             </div>
-            <div className="flex flex-[0.85]">
+            <div className="flex flex-[0.85] flex-col">
               <div className="flex items-center gap-6">
                 <CheckboxField
                   id="everyDay"
@@ -183,9 +183,9 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
                   }
                 />
               </div>
-              {showFieldError(touched.runningDays, errors.runningDays) && (
+              {errors.runningDays && (
                 <span className="text-red-500 mt-2">
-                  showFieldError(touched.runningDays, errors.runningDays)
+                  {errors.runningDays as string}
                 </span>
               )}
             </div>
