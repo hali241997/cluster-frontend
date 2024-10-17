@@ -5,12 +5,14 @@ import { CheckboxField } from "@/components/CheckboxField";
 import { DirectoryField } from "@/components/DirectoryField";
 import { TextField } from "@/components/TextField";
 import Routes from "@/config/routes";
+import { ErrorType } from "@/types";
 import axiosClient from "@/utils/axiosClient";
 import { showFieldError } from "@/utils/form";
 import { AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { PolicySchedule } from "./_components/PolicySchedule";
 import { SnapshotLocking } from "./_components/SnapshotLocking";
 import {
@@ -62,11 +64,16 @@ const Policy: FC = () => {
         enableLockedSnapshot: values.enableLockedSnapshot,
         enablePolicy: values.enablePolicy,
       });
-      if (response.status === 201 || response.status === 200) {
+      if (response.status === 201) {
         // new policy created
+        toast.success("New Policy Created");
+      } else if (response.status === 200) {
+        // policy updated
+        toast.success("Policy Updated");
       }
     } catch (error) {
-      console.log(error.response.data);
+      const err = error as ErrorType;
+      toast.error(err.response.data);
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +122,8 @@ const Policy: FC = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      const err = error as ErrorType;
+      toast.error(err.response.data);
     } finally {
       setIsLoading(false);
     }

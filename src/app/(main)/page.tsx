@@ -6,10 +6,12 @@ import {
   ClusterData,
   useClusterState,
 } from "@/redux/cluster/slice";
+import { ErrorType } from "@/types";
 import axiosClient from "@/utils/axiosClient";
 import { AxiosResponse } from "axios";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 import { IOPS } from "./_components/IOPS";
 import { Throughput } from "./_components/Throughput";
 
@@ -61,7 +63,8 @@ const PerfomanceMetrics: FC = () => {
         );
       }
     } catch (error) {
-      console.log(error);
+      const err = error as ErrorType;
+      toast.error(err.response.data);
     } finally {
       setLoading(false);
     }
