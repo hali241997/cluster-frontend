@@ -1,5 +1,6 @@
 "use client";
 
+import Routes from "@/config/routes";
 import { cn } from "@/utils/tailwindMerge";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,16 +10,16 @@ const appRoutes = [
   {
     key: "metrics",
     value: "Performance Metrics",
-    href: "/",
+    href: Routes.home,
   },
   {
     key: "policy",
     value: "Edit Snapshot Policy",
-    href: "/policy",
+    href: Routes.policy,
   },
 ];
 
-export const Routes: FC = () => {
+export const AppRoutes: FC = () => {
   const pathname = usePathname();
 
   return (

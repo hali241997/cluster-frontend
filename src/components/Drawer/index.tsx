@@ -1,7 +1,7 @@
 import { FC } from "react";
+import { AppRoutes } from "./AppRoutes";
 import { CurrentUser } from "./CurrentUser";
 import { Heading } from "./Heading";
-import { Routes } from "./Routes";
 
 export const Drawer: FC = () => {
   return (
@@ -10,7 +10,7 @@ export const Drawer: FC = () => {
         <div className="h-full">
           <Heading />
 
-          <Routes />
+          <AppRoutes />
         </div>
 
         <div>

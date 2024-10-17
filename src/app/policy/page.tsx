@@ -4,21 +4,127 @@ import { Button } from "@/components/Button";
 import { CheckboxField } from "@/components/CheckboxField";
 import { DirectoryField } from "@/components/DirectoryField";
 import { TextField } from "@/components/TextField";
+import Routes from "@/config/routes";
+import axiosClient from "@/utils/axiosClient";
 import { showFieldError } from "@/utils/form";
+import { AxiosResponse } from "axios";
 import { useFormik } from "formik";
-import { ChangeEvent, FC, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import { PolicySchedule } from "./_components/PolicySchedule";
 import { SnapshotLocking } from "./_components/SnapshotLocking";
-import { FormInputs, formValidation, initialValues } from "./form";
+import {
+  DeleteSnapshotEnum,
+  deleteSnapshotOptions,
+  DeleteSnapshotRecurrenceEnum,
+  FormInputs,
+  formValidation,
+  initialValues,
+  recurringOptions,
+  ScheduleEnum,
+  scheduleOptions,
+  SnapshotRunningDays,
+} from "./form";
+
+interface Policy {
+  name: string;
+  directory: string;
+  scheduleType: ScheduleEnum;
+  takeSnapshotAt: string;
+  runningDays: SnapshotRunningDays;
+  deleteSnapshot: DeleteSnapshotEnum;
+  deleteSnapshotCount: number;
+  deleteSnapshotRecurrence: DeleteSnapshotRecurrenceEnum;
+  enableLockedSnapshot: boolean;
+  enablePolicy: boolean;
+}
+
+const client = axiosClient();
 
 const Policy: FC = () => {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = useCallback(async (values: FormInputs) => {
+    try {
+      setIsLoading(true);
+
+      const response: AxiosResponse = await client.put("/setPolicy", {
+        name: values.policyName,
+        directory: values.applyToDirectory,
+        scheduleType: values.scheduleType.value,
+        takeSnapshotAt: values.takeSnapshotAt,
+        runningDays: values.runningDays,
+        deleteSnapshot: values.deleteSnapshot.value,
+        deleteSnapshotCount: values.deleteSnapshotCount,
+        deleteSnapshotRecurrence: values.deleteSnapshotRecurrence.value,
+        enableLockedSnapshot: values.enableLockedSnapshot,
+        enablePolicy: values.enablePolicy,
+      });
+      if (response.status === 201 || response.status === 200) {
+        // new policy created
+      }
+    } catch (error) {
+      console.log(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   const formik = useFormik({
     initialValues,
     validationSchema: formValidation,
-    onSubmit: (values: FormInputs) => {
-      console.log({ values });
-    },
+    onSubmit: handleSubmit,
   });
+
+  const getPolicy = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const response: AxiosResponse<Policy> = await client.get("/getPolicy");
+      if (response.status === 200) {
+        const { data } = response;
+
+        const scheduleOptionsIndex = scheduleOptions.findIndex(
+          (item) => item.value === data.scheduleType
+        );
+        const deleteSnapshotOptionsIndex = deleteSnapshotOptions.findIndex(
+          (item) => item.value === data.deleteSnapshot
+        );
+        const recurringOptionsIndex = recurringOptions.findIndex(
+          (item) => item.value === data.deleteSnapshotRecurrence
+        );
+        if (
+          scheduleOptionsIndex > -1 &&
+          deleteSnapshotOptionsIndex > -1 &&
+          recurringOptionsIndex > -1
+        ) {
+          formik.setValues({
+            policyName: data.name,
+            applyToDirectory: data.directory,
+            scheduleType: scheduleOptions[scheduleOptionsIndex],
+            takeSnapshotAt: data.takeSnapshotAt,
+            runningDays: data.runningDays,
+            deleteSnapshot: deleteSnapshotOptions[deleteSnapshotOptionsIndex],
+            deleteSnapshotCount: data.deleteSnapshotCount,
+            deleteSnapshotRecurrence: recurringOptions[recurringOptionsIndex],
+            enableLockedSnapshot: data.enableLockedSnapshot,
+            enablePolicy: data.enablePolicy,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    getPolicy();
+  }, [getPolicy]);
 
   const handleEnablePolicyChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +132,10 @@ const Policy: FC = () => {
     },
     [formik]
   );
+
+  const handleCancelClick = useCallback(() => {
+    router.push(Routes.home);
+  }, [router]);
 
   return (
     <form action={() => formik.handleSubmit()}>
@@ -91,7 +201,9 @@ const Policy: FC = () => {
 
         <div className="space-x-[14px]">
           <Button type="submit">Save Policy</Button>
-          <Button variant="ghost">Cancel</Button>
+          <Button variant="ghost" onClick={handleCancelClick}>
+            Cancel
+          </Button>
         </div>
       </div>
     </form>

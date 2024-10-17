@@ -47,10 +47,10 @@ const PerfomanceMetrics: FC = () => {
     try {
       setLoading(true);
 
-      const response: AxiosResponse<ClusterResponse> = await client({
-        url: "/getTimeSeries",
-        params: { timezone: selectedOption.value },
-      });
+      const response: AxiosResponse<ClusterResponse> = await client.get(
+        "/getTimeSeries",
+        { params: { timezone: selectedOption.value } }
+      );
       if (response.status === 200) {
         dispatch(
           addCluster({

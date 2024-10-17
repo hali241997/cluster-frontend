@@ -3,21 +3,38 @@ import { SelectFieldOption } from "@/components/SelectField";
 import { ErrorMessages } from "@/utils/form";
 import { boolean, number, object, string } from "yup";
 
+export enum ScheduleEnum {
+  daily = "daily",
+  weekly = "weekly",
+}
+
+export enum DeleteSnapshotEnum {
+  auto = "auto",
+  never = "never",
+}
+
+export enum DeleteSnapshotRecurrenceEnum {
+  days = "days",
+  weeks = "weeks",
+  months = "months",
+  years = "years",
+}
+
 export const scheduleOptions: Array<SelectFieldOption> = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
+  { label: "Daily", value: ScheduleEnum.daily },
+  { label: "Weekly", value: ScheduleEnum.weekly },
 ];
 
 export const deleteSnapshotOptions: Array<RadioGroupOption> = [
-  { value: "never", label: "Never" },
-  { value: "auto", label: "Automatically after" },
+  { label: "Never", value: DeleteSnapshotEnum.never },
+  { label: "Automatically after", value: DeleteSnapshotEnum.auto },
 ];
 
 export const recurringOptions: Array<SelectFieldOption> = [
-  { value: "days", label: "day(s)" },
-  { value: "weeks", label: "week(s)" },
-  { value: "months", label: "month(s)" },
-  { value: "years", label: "year(s)" },
+  { label: "day(s)", value: DeleteSnapshotRecurrenceEnum.days },
+  { label: "week(s)", value: DeleteSnapshotRecurrenceEnum.weeks },
+  { label: "month(s)", value: DeleteSnapshotRecurrenceEnum.months },
+  { label: "year(s)", value: DeleteSnapshotRecurrenceEnum.years },
 ];
 
 export interface FormInputs {
@@ -45,22 +62,22 @@ export interface SnapshotRunningDays {
 }
 
 export const initialValues: FormInputs = {
-  policyName: "ProjectX_Daily",
-  applyToDirectory: "Production/ProjectX",
+  policyName: "",
+  applyToDirectory: "",
   scheduleType: scheduleOptions[0],
   takeSnapshotAt: "00:00",
   runningDays: {
     everyDay: false,
-    monday: true,
-    tuesday: true,
-    wednesday: true,
-    thursday: true,
-    friday: true,
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
     saturday: false,
     sunday: false,
   },
   deleteSnapshot: deleteSnapshotOptions[0],
-  deleteSnapshotCount: 99,
+  deleteSnapshotCount: 0,
   deleteSnapshotRecurrence: recurringOptions[0],
   enableLockedSnapshot: false,
   enablePolicy: false,
