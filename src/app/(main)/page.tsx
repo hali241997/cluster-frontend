@@ -1,11 +1,7 @@
 "use client";
 
 import { SelectField, SelectFieldOption } from "@/components/SelectField";
-import {
-  addCluster,
-  ClusterData,
-  useClusterState,
-} from "@/redux/cluster/slice";
+import { addCluster, ClusterData } from "@/redux/cluster/slice";
 import { ErrorType } from "@/types";
 import axiosClient from "@/utils/axiosClient";
 import { AxiosResponse } from "axios";
@@ -30,8 +26,6 @@ interface ClusterResponse {
 const client = axiosClient();
 
 const PerfomanceMetrics: FC = () => {
-  const { iops, throughputs } = useClusterState();
-
   const dispatch = useDispatch();
 
   const [isLoading, setLoading] = useState(false);
@@ -89,9 +83,9 @@ const PerfomanceMetrics: FC = () => {
       </div>
 
       <div className="flex flex-col gap-14 lg:gap-[70px]">
-        {iops.length > 0 && <IOPS />}
+        <IOPS isLoading={isLoading} />
 
-        {throughputs.length > 0 && <Throughput />}
+        <Throughput isLoading={isLoading} />
       </div>
     </div>
   );

@@ -78,7 +78,7 @@ export const TimeFormatField: FC<TimeFormatFieldProps> = ({
 
   return (
     <div>
-      <div className="h-9 flex gap-2 items-center">
+      <div className="flex gap-2 items-center">
         <NumberField
           value={takeSnapshotAt.split(":")[0]}
           onChange={handleHoursChange}

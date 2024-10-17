@@ -1,11 +1,13 @@
 import { CheckboxField } from "@/components/CheckboxField";
 import { RadioGroupOption } from "@/components/RadioGroupField";
+import { Skeleton } from "@/components/Skeleton";
 import { showFieldError } from "@/utils/form";
 import { FormikErrors, FormikTouched } from "formik";
 import { ChangeEvent, FC, useCallback } from "react";
 import { FormInputs } from "../../form";
 
 export interface SnapshotLockingProps {
+  isLoading: boolean;
   enableLockedSnapshot: boolean;
   deleteSnapshot: RadioGroupOption;
   touched: FormikTouched<FormInputs>;
@@ -18,6 +20,7 @@ export interface SnapshotLockingProps {
 }
 
 export const SnapshotLocking: FC<SnapshotLockingProps> = ({
+  isLoading,
   enableLockedSnapshot,
   deleteSnapshot,
   touched,
@@ -40,17 +43,21 @@ export const SnapshotLocking: FC<SnapshotLockingProps> = ({
         delete.
       </div>
 
-      <CheckboxField
-        id="enableLockedSnapshot"
-        label="Enable locked snapshots"
-        checked={enableLockedSnapshot}
-        onChange={handleLockedSnapshotChange}
-        disabled={deleteSnapshot.value === "never"}
-        error={showFieldError(
-          touched.enableLockedSnapshot,
-          errors.enableLockedSnapshot
-        )}
-      />
+      {isLoading ? (
+        <Skeleton className="h-9 w-[300px]" />
+      ) : (
+        <CheckboxField
+          id="enableLockedSnapshot"
+          label="Enable locked snapshots"
+          checked={enableLockedSnapshot}
+          onChange={handleLockedSnapshotChange}
+          disabled={deleteSnapshot.value === "never"}
+          error={showFieldError(
+            touched.enableLockedSnapshot,
+            errors.enableLockedSnapshot
+          )}
+        />
+      )}
     </div>
   );
 };

@@ -80,7 +80,7 @@ export const DeleteSnapshotField: FC<DeleteSnapshotFieldProps> = ({
 
   return (
     <div>
-      <div className="h-9 flex items-center">
+      <div className="flex items-center">
         <RadioGroupField
           selectedOption={deleteSnapshot}
           onChange={onDeleteSnapshotOptionSelect}

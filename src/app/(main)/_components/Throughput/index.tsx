@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/Skeleton";
 import { useClusterState } from "@/redux/cluster/slice";
 import { bytesToGbs, bytesToKbs } from "@/utils/conversion";
 import { toMonthYearFormat } from "@/utils/dateTime";
@@ -16,7 +17,11 @@ import {
 import { CategoricalChartState } from "recharts/types/chart/types";
 import { DateTooltip } from "../DateTooltip";
 
-export const Throughput: FC = () => {
+export interface ThroughputProps {
+  isLoading: boolean;
+}
+
+export const Throughput: FC<ThroughputProps> = ({ isLoading }) => {
   const { throughputs } = useClusterState();
 
   const [hoveredData, setHoveredData] = useState<{
@@ -45,83 +50,91 @@ export const Throughput: FC = () => {
 
   return (
     <div className="w-full h-auto lg:h-[144px] flex flex-col lg:flex-row relative gap-4">
-      <div className="flex-1">
-        <div className="text-[#C7CACC] text-lg leading-6 mb-3 ml-4">
-          Throughput
+      {isLoading ? (
+        <Skeleton className="h-[144px] flex-1" />
+      ) : (
+        <div className="flex-1">
+          <div className="text-[#C7CACC] text-lg leading-6 mb-3 ml-4">
+            Throughput
+          </div>
+          <ResponsiveContainer width="100%" height={144}>
+            <LineChart data={throughputs} onMouseMove={handleMouseMove}>
+              <CartesianGrid vertical={false} stroke="#646B72" />
+              <XAxis
+                dataKey="date"
+                style={{
+                  fontWeight: 400,
+                  fill: "#A6AAAE",
+                  fontSize: "12px",
+                  lineHeight: "16px",
+                }}
+                tickFormatter={(value) => toMonthYearFormat(value)}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                style={{
+                  fontWeight: 400,
+                  fill: "#A6AAAE",
+                  fontSize: "12px",
+                  lineHeight: "16px",
+                }}
+                domain={[0, 2 * 1024 ** 3]}
+                ticks={[0, 1 * 1024 ** 3, 2 * 1024 ** 3]}
+                tickFormatter={(value) => `${bytesToGbs(value)} GB/s`}
+              />
+              <Tooltip
+                content={<DateTooltip />}
+                wrapperStyle={{ width: "100px" }}
+              />
+              <Line
+                dot={false}
+                activeDot
+                dataKey="readThroughput"
+                stroke="#8E8ECD"
+                strokeWidth={2}
+              />
+              <Line
+                dot={false}
+                activeDot
+                dataKey="writeThroughput"
+                stroke="#00A3CA"
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
-        <ResponsiveContainer width="100%" height={144}>
-          <LineChart data={throughputs} onMouseMove={handleMouseMove}>
-            <CartesianGrid vertical={false} stroke="#646B72" />
-            <XAxis
-              dataKey="date"
-              style={{
-                fontWeight: 400,
-                fill: "#A6AAAE",
-                fontSize: "12px",
-                lineHeight: "16px",
-              }}
-              tickFormatter={(value) => toMonthYearFormat(value)}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              style={{
-                fontWeight: 400,
-                fill: "#A6AAAE",
-                fontSize: "12px",
-                lineHeight: "16px",
-              }}
-              domain={[0, 2 * 1024 ** 3]}
-              ticks={[0, 1 * 1024 ** 3, 2 * 1024 ** 3]}
-              tickFormatter={(value) => `${bytesToGbs(value)} GB/s`}
-            />
-            <Tooltip
-              content={<DateTooltip />}
-              wrapperStyle={{ width: "100px" }}
-            />
-            <Line
-              dot={false}
-              activeDot
-              dataKey="readThroughput"
-              stroke="#8E8ECD"
-              strokeWidth={2}
-            />
-            <Line
-              dot={false}
-              activeDot
-              dataKey="writeThroughput"
-              stroke="#00A3CA"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      )}
 
-      <div>
-        <div className="text-lg text-[#858B90]">Throughput</div>
+      {isLoading ? (
+        <Skeleton className="w-auto lg:w-[169px] h-[144px]" />
+      ) : (
+        <div>
+          <div className="text-lg text-[#858B90]">Throughput</div>
 
-        <div className="w-auto lg:w-[160px] border-[#333B4480] border-[1px] bg-[#222C364D]">
-          <div className="border-b-[#333B4480] border-b-[1px] px-3 py-2">
-            <div className="text-base leading-5 font-medium text-[#A6AAAE]">
-              Read
+          <div className="w-auto lg:w-[160px] border-[#333B4480] border-[1px] bg-[#222C364D]">
+            <div className="border-b-[#333B4480] border-b-[1px] px-3 py-2">
+              <div className="text-base leading-5 font-medium text-[#A6AAAE]">
+                Read
+              </div>
+              <div className="text-lg text-[#8E8ECD]">
+                {bytesToKbs(hoveredData.readThroughput, 1)}{" "}
+                <span className="text-xs">KB/s</span>
+              </div>
             </div>
-            <div className="text-lg text-[#8E8ECD]">
-              {bytesToKbs(hoveredData.readThroughput, 1)}{" "}
-              <span className="text-xs">KB/s</span>
+
+            <div className="px-3 py-2">
+              <div className="text-base leading-5 font-medium text-[#A6AAAE]">
+                Write
+              </div>
+              <div className="text-lg leading-5 text-[#00A3CA]">
+                {bytesToKbs(hoveredData.writeThroughput, 1)}{" "}
+                <span className="text-xs">KB/s</span>
+              </div>
             </div>
           </div>
-
-          <div className="px-3 py-2">
-            <div className="text-base leading-5 font-medium text-[#A6AAAE]">
-              Write
-            </div>
-            <div className="text-lg leading-5 text-[#00A3CA]">
-              {bytesToKbs(hoveredData.writeThroughput, 1)}{" "}
-              <span className="text-xs">KB/s</span>
-            </div>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

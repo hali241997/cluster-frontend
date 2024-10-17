@@ -3,6 +3,7 @@
 import { Button } from "@/components/Button";
 import { CheckboxField } from "@/components/CheckboxField";
 import { DirectoryField } from "@/components/DirectoryField";
+import { Skeleton } from "@/components/Skeleton";
 import { TextField } from "@/components/TextField";
 import Routes from "@/config/routes";
 import { ErrorType } from "@/types";
@@ -152,35 +153,44 @@ const Policy: FC = () => {
           Edit Snapshot Policy
         </div>
 
-        <div className="w-[793px] space-y-3 mb-3">
-          <TextField
-            id="policyName"
-            label="Policy Name"
-            required
-            value={formik.values.policyName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={showFieldError(
-              formik.touched.policyName,
-              formik.errors.policyName
-            )}
-          />
+        <div className="w-auto lg:w-[793px] space-y-3 mb-3">
+          {isLoading ? (
+            <Skeleton className="h-[60px] rounded" />
+          ) : (
+            <TextField
+              id="policyName"
+              label="Policy Name"
+              required
+              value={formik.values.policyName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={showFieldError(
+                formik.touched.policyName,
+                formik.errors.policyName
+              )}
+            />
+          )}
 
-          <DirectoryField
-            id="applyToDirectory"
-            label="Apply to Directory"
-            required
-            value={formik.values.applyToDirectory}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={showFieldError(
-              formik.touched.applyToDirectory,
-              formik.errors.applyToDirectory
-            )}
-          />
+          {isLoading ? (
+            <Skeleton className="h-[60px] rounded" />
+          ) : (
+            <DirectoryField
+              id="applyToDirectory"
+              label="Apply to Directory"
+              required
+              value={formik.values.applyToDirectory}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={showFieldError(
+                formik.touched.applyToDirectory,
+                formik.errors.applyToDirectory
+              )}
+            />
+          )}
         </div>
 
         <PolicySchedule
+          isLoading={isLoading}
           values={formik.values}
           touched={formik.touched}
           errors={formik.errors}
@@ -188,6 +198,7 @@ const Policy: FC = () => {
         />
 
         <SnapshotLocking
+          isLoading={isLoading}
           enableLockedSnapshot={formik.values.enableLockedSnapshot}
           deleteSnapshot={formik.values.deleteSnapshot}
           touched={formik.touched}
@@ -195,21 +206,31 @@ const Policy: FC = () => {
           setFieldValue={formik.setFieldValue}
         />
 
-        <CheckboxField
-          id="enablePolicy"
-          label="Enable policy"
-          containerClassName="mb-[27px]"
-          checked={formik.values.enablePolicy}
-          onChange={handleEnablePolicyChange}
-          error={showFieldError(
-            formik.touched.enablePolicy,
-            formik.errors.enablePolicy
-          )}
-        />
+        {isLoading ? (
+          <Skeleton className="h-9 w-[300px]" />
+        ) : (
+          <CheckboxField
+            id="enablePolicy"
+            label="Enable policy"
+            containerClassName="mb-[27px]"
+            checked={formik.values.enablePolicy}
+            onChange={handleEnablePolicyChange}
+            error={showFieldError(
+              formik.touched.enablePolicy,
+              formik.errors.enablePolicy
+            )}
+          />
+        )}
 
         <div className="space-x-[14px]">
-          <Button type="submit">Save Policy</Button>
-          <Button variant="ghost" onClick={handleCancelClick}>
+          <Button type="submit" disabled={isLoading}>
+            Save Policy
+          </Button>
+          <Button
+            variant="ghost"
+            disabled={isLoading}
+            onClick={handleCancelClick}
+          >
             Cancel
           </Button>
         </div>
