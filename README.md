@@ -13,7 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 2. `/policy` route will have the Snapshot policy
 
 ## Snapshots of UI
-Performance Metric
+Performance Metrics
 ![Performance Metrics](performance-metrics.png)
 
 Snapshot Policy
