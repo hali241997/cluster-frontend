@@ -1,6 +1,6 @@
 "use client";
 
-import { Drawer } from "@/components/Drawer";
+import { Drawer } from "@/app/(main)/_components/Drawer";
 import { store } from "@/redux/store";
 import { Nunito } from "next/font/google";
 import { Provider } from "react-redux";

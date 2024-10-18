@@ -40,6 +40,7 @@ export const clusterSlice = createSlice({
   name: "cluster",
   initialState,
   reducers: {
+    // used to update the iops and throughput array
     addCluster(
       state: ClusterInitialState,
       {
@@ -66,6 +67,7 @@ export const clusterSlice = createSlice({
   },
 });
 
+// selector used to access the cluster reducer state
 export const useClusterState = () =>
   useSelector((state: RootState) => state.cluster);
 

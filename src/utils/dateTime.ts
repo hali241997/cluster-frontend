@@ -1,3 +1,4 @@
+// convert iso string in MMM YY format
 export const toMonthYearFormat = (date: string) => {
   const dateToFormat = new Date(date);
 
@@ -9,6 +10,7 @@ export const toMonthYearFormat = (date: string) => {
   return formattedDate;
 };
 
+// convert iso string in MMM DD, HH:mm a format
 export const toReadableFormat = (date: string) => {
   const dateToFormat = new Date(date);
 

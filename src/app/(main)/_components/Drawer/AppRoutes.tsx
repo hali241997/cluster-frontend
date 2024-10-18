@@ -19,6 +19,7 @@ const appRoutes = [
   },
 ];
 
+// Used inside Drawer/index.tsx to display routes
 export const AppRoutes: FC = () => {
   const pathname = usePathname();
 
