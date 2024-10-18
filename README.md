@@ -11,3 +11,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Routes to visit
 1. `/` route will have the IOPS and Throughput graph
 2. `/policy` route will have the Snapshot policy
+
+## Snapshots of UI
+![Performance Metrics](performance-metrics.png)
+![Snapshot Policy](image.png)
