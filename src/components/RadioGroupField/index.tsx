@@ -47,7 +47,7 @@ export const RadioGroupField: FC<RadioGroupFieldProps> = ({
             {typeof option.label === "string" ? (
               <label
                 htmlFor={option.value}
-                className="text-lg text-[#C7CACC] -mb-[1px]"
+                className="text-lg text-whiteSecondary -mb-[1px]"
               >
                 {option.label}
               </label>

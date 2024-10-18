@@ -36,8 +36,8 @@ export const SnapshotLocking: FC<SnapshotLockingProps> = ({
 
   return (
     <div className="mb-[42px]">
-      <div className="text-lg text-[#C7CACC]">Snapshot Locking</div>
-      <div className="text-base text-[#A6AAAE] mt-[3px] mb-[6px]">
+      <div className="text-lg text-whiteSecondary">Snapshot Locking</div>
+      <div className="text-base text-whiteTertiary mt-[3px] mb-[6px]">
         Locked snapshots cannot be deleted before the deletion schedule expires.
         For this feature to be available, snapshots must be set to automatically
         delete.

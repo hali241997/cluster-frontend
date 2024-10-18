@@ -10,12 +10,21 @@ const config: Config = {
     extend: {
       colors: {
         background: "#13181E",
-        lightGrey: "#2D3E4E",
-        grey: "#242C35",
-        lightWhite: "#f3f3f3",
+        darkPrimary: "#222C36",
+        greyPrimary: "#242C35",
+        greySecondary: "#2D3E4E",
+        whitePrimary: "#f3f3f3",
+        whiteSecondary: "#C7CACC",
+        whiteTertiary: "#A6AAAE",
+        bluePrimary: "#00A3CA",
       },
       fontFamily: {
         nunito: ["var(--font-nunito)", "sans-serif"],
+      },
+      fontSize: {
+        h1: ["20px", { lineHeight: "28px", fontWeight: 300 }],
+        h2: ["18px", { lineHeight: "28px" }],
+        h3: ["16px", { lineHeight: "24px", fontWeight: 500 }],
       },
     },
   },

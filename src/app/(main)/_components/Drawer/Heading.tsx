@@ -15,10 +15,10 @@ export const Heading: FC = () => {
           <Image src={Logo} alt="logo" width={28} height={28} />
         </div>
 
-        <div className="font-light text-xl leading-8">{name}</div>
+        <div className="text-h1">{name}</div>
       </div>
 
-      <hr className="border-lightGrey" />
+      <hr className="border-greySecondary" />
     </div>
   );
 };

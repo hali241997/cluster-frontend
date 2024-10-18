@@ -58,7 +58,7 @@ const PerfomanceMetrics: FC = () => {
   return (
     <div className="py-3 px-4">
       <div className="flex items-center justify-between mb-6">
-        <div className="font-light text-xl leading-8">Performance Metrics</div>
+        <div className="text-h1">Performance Metrics</div>
 
         <SelectField
           id="interval"

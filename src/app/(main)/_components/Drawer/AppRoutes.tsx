@@ -33,7 +33,7 @@ export const AppRoutes: FC = () => {
                 className={cn(
                   "flex items-center py-1",
                   route.href === pathname &&
-                    "bg-[#13181E] border-r-2 border-r-[#00A3CA]"
+                    "bg-[#13181E] border-r-2 border-r-bluePrimary"
                 )}
               >
                 <div className="w-1 h-1 rounded-full bg-white mx-2" />

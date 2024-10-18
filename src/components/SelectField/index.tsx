@@ -55,7 +55,10 @@ export const SelectField: FC<SelectFieldProps> = ({
     <div ref={ref} className={cn("relative", containerClassName)}>
       <div className={cn("flex flex-col gap-2", innerClassName)}>
         {label && (
-          <label htmlFor={id} className="font-normal text-lg text-[#C7CACC]">
+          <label
+            htmlFor={id}
+            className="font-normal text-lg text-whiteSecondary"
+          >
             {label}
           </label>
         )}
@@ -64,16 +67,16 @@ export const SelectField: FC<SelectFieldProps> = ({
           id={id}
           onClick={() => setOpen(!open)}
           className={cn(
-            "bg-[#222C36] h-full border-[#373F48] border-[1px] flex items-center justify-between px-2 gap-2 rounded cursor-pointer",
+            "bg-darkPrimary h-full border-[#373F48] border-[1px] flex items-center justify-between px-2 gap-2 rounded cursor-pointer",
             error && "border-red-500",
             fieldClassName
           )}
         >
-          <div className="text-[#A6AAAE]">{selectedOption.label}</div>
+          <div className="text-whiteTertiary">{selectedOption.label}</div>
           <IoCaretDown
             size={10}
             className={cn(
-              "text-[#A6AAAE] transition-all",
+              "text-whiteTertiary transition-all",
               open && "rotate-180"
             )}
           />
@@ -82,7 +85,7 @@ export const SelectField: FC<SelectFieldProps> = ({
 
       <ul
         className={cn(
-          "bg-[#222C36] mt-1 border-[#373F48] border-[1px] overflow-y-auto absolute w-full z-10 flex flex-col space-y-1 rounded",
+          "bg-darkPrimary mt-1 border-[#373F48] border-[1px] overflow-y-auto absolute w-full z-10 flex flex-col space-y-1 rounded",
           open ? "max-h-60" : "max-h-0 border-0"
         )}
       >
@@ -91,7 +94,7 @@ export const SelectField: FC<SelectFieldProps> = ({
             key={option.value}
             className={cn(
               "hover:bg-[#31475d] cursor-pointer p-1 border-b-[#373F48] border-b-[1px]",
-              option.label === selectedOption.label && "text-[#A6AAAE]",
+              option.label === selectedOption.label && "text-whiteTertiary",
               index === options.length - 1 && "border-b-0"
             )}
             onClick={() => handleOptionClick(option)}

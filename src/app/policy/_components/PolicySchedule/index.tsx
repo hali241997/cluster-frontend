@@ -67,7 +67,9 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
         <div className="bg-[#242C35] border-t-[#3D454DCC] border-t-[1px] px-6 py-9 space-y-[18px]">
           <div className="flex flex-1 flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
             <div className="flex flex-[0.15] lg:justify-end">
-              <div className="text-lg text-[#C7CACC]">Select Schedule Type</div>
+              <div className="text-lg text-whiteSecondary">
+                Select Schedule Type
+              </div>
             </div>
             <div className="flex flex-[0.85]">
               <SelectField
@@ -86,9 +88,11 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
 
           <div className="flex flex-1 flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
             <div className="flex flex-[0.15] lg:justify-end">
-              <div className="text-lg text-[#C7CACC]">Set to Time Zone</div>
+              <div className="text-lg text-whiteSecondary">
+                Set to Time Zone
+              </div>
             </div>
-            <div className="flex flex-[0.85] items-center text-lg text-[#C7CACC]">
+            <div className="flex flex-[0.85] items-center text-lg text-whiteSecondary">
               America/Los Angeles
               <RiQuestionFill size={20} fill="#0298FF" className="ml-2" />
             </div>
@@ -96,7 +100,9 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
 
           <div className="flex flex-1 flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
             <div className="flex flex-[0.15] lg:justify-end">
-              <div className="text-lg text-[#C7CACC]">Take a Snapshot at</div>
+              <div className="text-lg text-whiteSecondary">
+                Take a Snapshot at
+              </div>
             </div>
             <div className="flex flex-[0.85]">
               <TimeFormatField
@@ -112,7 +118,7 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
 
           <div className="flex flex-1 flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
             <div className="flex flex-[0.15] lg:justify-end">
-              <div className="text-lg text-[#C7CACC]">
+              <div className="text-lg text-whiteSecondary">
                 On the Following Day(s)
               </div>
             </div>
@@ -193,7 +199,9 @@ export const PolicySchedule: FC<PolicyScheduleProps> = ({
 
           <div className="flex flex-1 flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
             <div className="flex flex-[0.15] lg:justify-end">
-              <div className="text-lg text-[#C7CACC]">Delete Each Snapshot</div>
+              <div className="text-lg text-whiteSecondary">
+                Delete Each Snapshot
+              </div>
             </div>
             <div className="flex flex-[0.85]">
               <DeleteSnapshotField

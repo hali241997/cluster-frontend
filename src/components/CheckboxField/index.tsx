@@ -29,7 +29,7 @@ export const CheckboxField: FC<CheckboxFieldProps> = ({
         {...props}
       />
       {label && (
-        <label htmlFor={id} className="text-lg text-[#C7CACC]">
+        <label htmlFor={id} className="text-lg text-whiteSecondary">
           {label}
         </label>
       )}

@@ -154,9 +154,7 @@ const Policy: FC = () => {
   return (
     <form action={() => formik.handleSubmit()}>
       <div className="py-3 pl-4">
-        <div className="text-xl leading-8 font-light text-[#F3F4F4] mb-5">
-          Edit Snapshot Policy
-        </div>
+        <div className="text-h1 text-[#F3F4F4] mb-5">Edit Snapshot Policy</div>
 
         <div className="w-auto lg:w-[793px] space-y-3 mb-3">
           {isLoading ? (

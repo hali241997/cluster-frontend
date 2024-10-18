@@ -54,7 +54,7 @@ export const Throughput: FC<ThroughputProps> = ({ isLoading }) => {
         <Skeleton className="h-[144px] flex-1" />
       ) : (
         <div className="flex-1">
-          <div className="text-[#C7CACC] text-lg leading-6 mb-3 ml-4">
+          <div className="text-whiteSecondary text-h2 mb-3 ml-4">
             Throughput
           </div>
           <ResponsiveContainer width="100%" height={144}>
@@ -114,9 +114,7 @@ export const Throughput: FC<ThroughputProps> = ({ isLoading }) => {
 
           <div className="w-auto lg:w-[160px] border-[#333B4480] border-[1px] bg-[#222C364D]">
             <div className="border-b-[#333B4480] border-b-[1px] px-3 py-2">
-              <div className="text-base leading-5 font-medium text-[#A6AAAE]">
-                Read
-              </div>
+              <div className="text-h3 text-whiteTertiary">Read</div>
               <div className="text-lg text-[#8E8ECD]">
                 {bytesToKbs(hoveredData.readThroughput, 1)}{" "}
                 <span className="text-xs">KB/s</span>
@@ -124,10 +122,8 @@ export const Throughput: FC<ThroughputProps> = ({ isLoading }) => {
             </div>
 
             <div className="px-3 py-2">
-              <div className="text-base leading-5 font-medium text-[#A6AAAE]">
-                Write
-              </div>
-              <div className="text-lg leading-5 text-[#00A3CA]">
+              <div className="text-h3 text-whiteTertiary">Write</div>
+              <div className="text-lg leading-5 text-bluePrimary">
                 {bytesToKbs(hoveredData.writeThroughput, 1)}{" "}
                 <span className="text-xs">KB/s</span>
               </div>

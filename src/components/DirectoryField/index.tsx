@@ -21,13 +21,13 @@ export const DirectoryField: FC<DirectoryFieldProps> = ({
   return (
     <div className={cn("flex flex-col gap-2", containerClassName)}>
       {label && (
-        <label htmlFor={id} className="font-normal text-lg text-[#C7CACC]">
+        <label htmlFor={id} className="font-normal text-lg text-whiteSecondary">
           {label}
         </label>
       )}
 
       <div className="flex">
-        <div className="border-[1px] border-[#424B53] w-10 flex items-center justify-center rounded-tl rounded-bl text-lg leading-6 text-[#F3F4F4]">
+        <div className="border-[1px] border-[#424B53] w-10 flex items-center justify-center rounded-tl rounded-bl text-h2 text-[#F3F4F4]">
           /
         </div>
 
@@ -36,7 +36,7 @@ export const DirectoryField: FC<DirectoryFieldProps> = ({
             id={id}
             name={id}
             className={cn(
-              "bg-[#424B5380] w-full border-[#424B53] border-[1px] px-2 py-[6px] text-[#C7CACC] text-lg leading-6 rounded rounded-tl-none rounded-bl-none focus-visible:outline-none",
+              "bg-[#424B5380] w-full border-[#424B53] border-[1px] px-2 py-[6px] text-whiteSecondary text-h2 rounded rounded-tl-none rounded-bl-none focus-visible:outline-none",
               error && "text-red-500 border-red-500"
             )}
             {...props}
