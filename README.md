@@ -14,4 +14,4 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Snapshots of UI
 ![Performance Metrics](performance-metrics.png)
-![Snapshot Policy](image.png)
+![Snapshot Policy](snapshot-policy.png)
