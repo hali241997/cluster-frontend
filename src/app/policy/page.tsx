@@ -6,13 +6,11 @@ import { DirectoryField } from "@/components/DirectoryField";
 import { Skeleton } from "@/components/Skeleton";
 import { TextField } from "@/components/TextField";
 import Routes from "@/config/routes";
-import { ErrorType } from "@/types";
-import axiosClient from "@/utils/axiosClient";
+import { useAxios } from "@/hooks/useAxios";
 import { showFieldError } from "@/utils/form";
-import { AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { PolicySchedule } from "./_components/PolicySchedule";
 import { SnapshotLocking } from "./_components/SnapshotLocking";
@@ -42,43 +40,52 @@ interface Policy {
   enablePolicy: boolean;
 }
 
-const client = axiosClient();
-
 const Policy: FC = () => {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading: setPolicyIsLoading, request: setPolicyRequest } =
+    useAxios();
+  const { isLoading: getPolicyIsLoading, request: getPolicyRequest } =
+    useAxios<Policy>();
 
-  const handleSubmit = useCallback(async (values: FormInputs) => {
-    try {
-      setIsLoading(true);
+  const isLoading = useMemo(
+    () => setPolicyIsLoading || getPolicyIsLoading,
+    [getPolicyIsLoading, setPolicyIsLoading]
+  );
 
-      const response: AxiosResponse = await client.put("/setPolicy", {
-        name: values.policyName,
-        directory: values.applyToDirectory,
-        scheduleType: values.scheduleType.value,
-        takeSnapshotAt: values.takeSnapshotAt,
-        runningDays: values.runningDays,
-        deleteSnapshot: values.deleteSnapshot.value,
-        deleteSnapshotCount: values.deleteSnapshotCount,
-        deleteSnapshotRecurrence: values.deleteSnapshotRecurrence.value,
-        enableLockedSnapshot: values.enableLockedSnapshot,
-        enablePolicy: values.enablePolicy,
+  const handleSubmit = useCallback(
+    async (values: FormInputs) => {
+      const response = await setPolicyRequest({
+        url: "/setPolicy",
+        method: "PUT",
+        data: {
+          name: values.policyName,
+          directory: values.applyToDirectory,
+          scheduleType: values.scheduleType.value,
+          takeSnapshotAt: values.takeSnapshotAt,
+          runningDays: values.runningDays,
+          deleteSnapshot: values.deleteSnapshot.value,
+          deleteSnapshotCount: values.deleteSnapshotCount,
+          deleteSnapshotRecurrence: values.deleteSnapshotRecurrence.value,
+          enableLockedSnapshot: values.enableLockedSnapshot,
+          enablePolicy: values.enablePolicy,
+        },
       });
-      if (response.status === 201) {
-        // new policy created
-        toast.success("New Policy Created");
-      } else if (response.status === 200) {
-        // policy updated
-        toast.success("Policy Updated");
+
+      if (response.success) {
+        const { status } = response.success;
+        if (status === 201) {
+          toast.success("New Policy Created");
+        } else if (status === 200) {
+          toast.success("Policy Updated");
+        }
+      } else {
+        const { data } = response.error;
+        toast.error(data);
       }
-    } catch (error) {
-      const err = error as ErrorType;
-      toast.error(err.response.data);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [setPolicyRequest]
+  );
 
   const formik = useFormik({
     initialValues,
@@ -87,49 +94,47 @@ const Policy: FC = () => {
   });
 
   const getPolicy = useCallback(async () => {
-    try {
-      setIsLoading(true);
+    const response = await getPolicyRequest({
+      url: "/getPolicy",
+      method: "GET",
+    });
+    if (response.success && response.success.status === 200) {
+      const { data } = response.success;
 
-      const response: AxiosResponse<Policy> = await client.get("/getPolicy");
-      if (response.status === 200) {
-        const { data } = response;
+      const scheduleOptionsIndex = scheduleOptions.findIndex(
+        (item) => item.value === data.scheduleType
+      );
+      const deleteSnapshotOptionsIndex = deleteSnapshotOptions.findIndex(
+        (item) => item.value === data.deleteSnapshot
+      );
+      const recurringOptionsIndex = recurringOptions.findIndex(
+        (item) => item.value === data.deleteSnapshotRecurrence
+      );
 
-        const scheduleOptionsIndex = scheduleOptions.findIndex(
-          (item) => item.value === data.scheduleType
-        );
-        const deleteSnapshotOptionsIndex = deleteSnapshotOptions.findIndex(
-          (item) => item.value === data.deleteSnapshot
-        );
-        const recurringOptionsIndex = recurringOptions.findIndex(
-          (item) => item.value === data.deleteSnapshotRecurrence
-        );
-        if (
-          scheduleOptionsIndex > -1 &&
-          deleteSnapshotOptionsIndex > -1 &&
-          recurringOptionsIndex > -1
-        ) {
-          formik.setValues({
-            policyName: data.name,
-            applyToDirectory: data.directory,
-            scheduleType: scheduleOptions[scheduleOptionsIndex],
-            takeSnapshotAt: data.takeSnapshotAt,
-            runningDays: data.runningDays,
-            deleteSnapshot: deleteSnapshotOptions[deleteSnapshotOptionsIndex],
-            deleteSnapshotCount: data.deleteSnapshotCount,
-            deleteSnapshotRecurrence: recurringOptions[recurringOptionsIndex],
-            enableLockedSnapshot: data.enableLockedSnapshot,
-            enablePolicy: data.enablePolicy,
-          });
-        }
+      if (
+        scheduleOptionsIndex > -1 &&
+        deleteSnapshotOptionsIndex > -1 &&
+        recurringOptionsIndex > -1
+      ) {
+        formik.setValues({
+          policyName: data.name,
+          applyToDirectory: data.directory,
+          scheduleType: scheduleOptions[scheduleOptionsIndex],
+          takeSnapshotAt: data.takeSnapshotAt,
+          runningDays: data.runningDays,
+          deleteSnapshot: deleteSnapshotOptions[deleteSnapshotOptionsIndex],
+          deleteSnapshotCount: data.deleteSnapshotCount,
+          deleteSnapshotRecurrence: recurringOptions[recurringOptionsIndex],
+          enableLockedSnapshot: data.enableLockedSnapshot,
+          enablePolicy: data.enablePolicy,
+        });
       }
-    } catch (error) {
-      const err = error as ErrorType;
-      toast.error(err.response.data);
-    } finally {
-      setIsLoading(false);
+    } else if (response.error) {
+      const { data } = response.error;
+      toast.error(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getPolicyRequest]);
 
   useEffect(() => {
     getPolicy();

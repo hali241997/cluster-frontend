@@ -1,10 +1,8 @@
 "use client";
 
 import { SelectField, SelectFieldOption } from "@/components/SelectField";
+import { useAxios } from "@/hooks/useAxios";
 import { addCluster, ClusterData } from "@/redux/cluster/slice";
-import { ErrorType } from "@/types";
-import axiosClient from "@/utils/axiosClient";
-import { AxiosResponse } from "axios";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -23,12 +21,10 @@ interface ClusterResponse {
   data: ClusterData[];
 }
 
-const client = axiosClient();
-
 const PerfomanceMetrics: FC = () => {
   const dispatch = useDispatch();
 
-  const [isLoading, setLoading] = useState(false);
+  const { isLoading, request } = useAxios<ClusterResponse>();
 
   const [selectedOption, setSelectedOption] = useState<SelectFieldOption>({
     value: "week",
@@ -40,29 +36,20 @@ const PerfomanceMetrics: FC = () => {
   }, []);
 
   const getAllClusterData = useCallback(async () => {
-    try {
-      setLoading(true);
+    const response = await request({
+      url: "/getTimeSeries",
+      method: "GET",
+      params: { timezone: selectedOption.value },
+    });
 
-      const response: AxiosResponse<ClusterResponse> = await client.get(
-        "/getTimeSeries",
-        { params: { timezone: selectedOption.value } }
-      );
-      if (response.status === 200) {
-        dispatch(
-          addCluster({
-            id: response.data.id,
-            name: response.data.name,
-            data: response.data.data,
-          })
-        );
-      }
-    } catch (error) {
-      const err = error as ErrorType;
-      toast.error(err.response.data);
-    } finally {
-      setLoading(false);
+    if (response.success && response.success.status === 200) {
+      const { data } = response.success;
+      dispatch(addCluster({ id: data.id, name: data.name, data: data.data }));
+    } else if (response.error) {
+      const { data } = response.error;
+      toast.error(data);
     }
-  }, [dispatch, selectedOption.value]);
+  }, [dispatch, request, selectedOption.value]);
 
   useEffect(() => {
     getAllClusterData();
